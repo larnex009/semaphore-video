@@ -2,7 +2,8 @@
 - hosts: all
   become: true
   tasks:
-     - name: Print OS info 
-       ansible.builtin.package:
-            name: apache2
- 
+     - name: Install Apache web server
+       package:
+          name: httpd
+          state: present
+
