@@ -1,5 +1,5 @@
 ---
-- hosts: web
+- hosts: servera
   become: true
   tasks:
      - name: Print OS info 
