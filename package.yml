@@ -1,9 +1,6 @@
 ---
 - name: Install the php & mariad
-  hosts: 
-    - dev 
-    - test 
-    - prod
+  hosts: all
   become: true
 
   tasks:
@@ -15,7 +12,7 @@
         state: present
 
 - name: Install RPM Dev tools and Update all packages
-  hosts: dev
+  hosts: all
   become: true
 
   tasks:
@@ -24,7 +21,4 @@
         name: "@Development Tools"
         state: present
 
-    - name: Update all packages
-      dnf:
-        name: "*"
-        state: latest
+
