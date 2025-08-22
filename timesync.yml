@@ -3,8 +3,9 @@
   hosts: all
   become: yes
   tasks:
-    - name: Set timezone to Africa/Lagos
-      community.general.timezone: Africa/Lagos
+    - name: Configure timezone
+      community.general.timezone:
+        name: Africa/Lagos
  
     - name: Ensure chrony service is running
       service:
