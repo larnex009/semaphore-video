@@ -1,46 +1,41 @@
 ---
-- name: create developer users on web host
-  hosts: all
+- name: Create User account with developer as job description
+  hosts: dev, test
   become: true
-
-  vars_files:
-    - /etc/ansible/playbooks/locker.yml
-    - /etc/ansible/playbooks/user_list.yml
 
   tasks:
-    - name: Create devops group
-      group:
-        name: devops
-        state: present
+     - name: Create group devops
+       group:
+          name: devops
+          state: present
 
-    - name: developers users
-      user:
-        name: "{{ item.name }}"
-        password: "{{ PW_developer | password_hash('sha512') }}"
-        groups: devops
-        append: yes
-      when: item.job == "developer"
-      loop: "{{ myusers }}"
+     - name: Create users 
+       user:
+          name: "{{ item.name }}"
+          password: "{{ PW_developer | password_hash('sha512') }}"
+          groups: devops
+       when: item.job == "developer"
+       loop: "{{ myusers }}"
 
-- name: create manager users on prod hosts
-  hosts: all
+- name: Create User account with manager as job description
+  hosts: prod
   become: true
+
+  tasks:
+     - name: Create group opsngr
+       group:
+          name: opsngr
+          state: present
+
+     - name: Create users 
+       user:
+          name: "{{ item.name }}"
+          password: "{{ PW_developer | password_hash('sha512') }}"
+          groups: devops
+       when: item.job == "manager"
+       loop: "{{ myusers }}"
+
   
-  vars_files:
-    - /etc/ansible/playbooks/locker.yml
-    - /etc/ansible/playbooks/user_list.yml
 
-  tasks:
-    - name: create opsngr group
-      group:
-        name: opsgnr
-        state: present
 
-    - name: managers users
-      user:
-        name: "{{ item.name }}"
-        password: "{{ PW_manager | password_hash('sha512') }}"
-        groups: opsgnr
-        append: yes
-      when: item.job == "manager"
-      loop: "{{ myusers }}"
+  
