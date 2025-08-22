@@ -1,6 +1,6 @@
 ---
 - name: create developer users on web host
-  hosts: web
+  hosts: all
   become: true
 
   vars_files:
@@ -23,7 +23,7 @@
       loop: "{{ myusers }}"
 
 - name: create manager users on prod hosts
-  hosts: prod
+  hosts: all
   become: true
   
   vars_files:
