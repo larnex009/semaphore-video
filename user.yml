@@ -1,0 +1,46 @@
+---
+- name: create developer users on web host
+  hosts: web
+  become: true
+
+  vars_files:
+    - /etc/ansible/playbooks/locker.yml
+    - /etc/ansible/playbooks/user_list.yml
+
+  tasks:
+    - name: Create devops group
+      group:
+        name: devops
+        state: present
+
+    - name: developers users
+      user:
+        name: "{{ item.name }}"
+        password: "{{ PW_developer | password_hash('sha512') }}"
+        groups: devops
+        append: yes
+      when: item.job == "developer"
+      loop: "{{ myusers }}"
+
+- name: create manager users on prod hosts
+  hosts: prod
+  become: true
+  
+  vars_files:
+    - /etc/ansible/playbooks/locker.yml
+    - /etc/ansible/playbooks/user_list.yml
+
+  tasks:
+    - name: create opsngr group
+      group:
+        name: opsgnr
+        state: present
+
+    - name: managers users
+      user:
+        name: "{{ item.name }}"
+        password: "{{ PW_manager | password_hash('sha512') }}"
+        groups: opsgnr
+        append: yes
+      when: item.job == "manager"
+      loop: "{{ myusers }}"
