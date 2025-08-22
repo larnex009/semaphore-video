@@ -1,0 +1,11 @@
+- name: Create a cron job
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Ensure cronjob for user root runs every 2 minutes
+      cron:
+        name: "Cronjob for root"
+        user: root
+        minute: "*/2"
+        job: 'logger "EX294 in progress"'
