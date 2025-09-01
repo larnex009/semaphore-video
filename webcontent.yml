@@ -1,0 +1,31 @@
+---
+- name: Creating a web content directory
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Create web dev group
+      group:
+        name: webdev
+        state: present
+
+    - name: Create webdev directory
+      file:
+        path: /webdev
+        group: webdev
+        mode: '2775'
+        state: directory
+
+    - name: Symbolically link /var/www/html/webdev to /webdev
+      file:
+        src: /webdev
+        dest: /var/www/html/webdev
+        state: link
+        force: yes
+
+
+    - name: create file index.html
+      copy:
+        content: "I want positive growth in My life God\n"
+        dest: /webdev/index.html
+        force: yes
